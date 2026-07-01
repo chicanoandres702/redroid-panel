@@ -22,6 +22,7 @@ Open http://localhost:3000 in your browser.
 - **Initialize System**: Starts the redroid container and connects ADB
 - **Terminate System**: Stops the redroid container
 - **Live Stream**: Displays Android screen via iframe on port 8000
+- **Mobile Ready**: Sidebar collapses on small screens with menu toggle
 
 ## API Endpoints
 
