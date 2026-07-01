@@ -29,7 +29,7 @@ test.describe('Redroid Control Panel', () => {
     test('should have stream iframe configured', async ({ page }) => {
         await page.goto('/');
         const iframe = page.locator('#stream-frame');
-        await expect(iframe).toBeVisible();
+        await expect(iframe).toHaveAttribute('src', /localhost:8000/);
     });
 
     test('should navigate to API start endpoint on button click', async ({ page }) => {
@@ -59,7 +59,14 @@ test.describe('Redroid Control Panel', () => {
 
     test('should have stream error element for displaying offline status', async ({ page }) => {
         await page.goto('/');
+        // Stream error div should exist in DOM (starts hidden)
         await expect(page.locator('#iframe-error')).toHaveText('System Stream Offline');
+    });
+
+    test('should display stream placeholder with instructions', async ({ page }) => {
+        await page.goto('/');
+        await expect(page.locator('#stream-placeholder')).toBeVisible();
+        await expect(page.locator('#stream-placeholder')).toContainText('Connect redroid container on port 8000');
     });
 });
 

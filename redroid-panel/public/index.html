@@ -102,8 +102,13 @@
         </div>
     </div>
     <div class="stream-viewport">
+        <div id="stream-placeholder" style="text-align: center; color: #94a3b8;">
+            <p style="font-size: 1.5rem; margin-bottom: 1rem;">📱</p>
+            <p>Android Stream</p>
+            <p style="font-size: 0.8rem; margin-top: 0.5rem;">Connect redroid container on port 8000</p>
+        </div>
         <div id="iframe-error" style="display: none; color: #ff0055; font-size: 1.2rem;">System Stream Offline</div>
-        <iframe id="stream-frame" src="" allowfullscreen></iframe>
+        <iframe id="stream-frame" src="" allowfullscreen style="display: none;"></iframe>
     </div>
     <script>
         const hostSecure = window.location.hostname;
