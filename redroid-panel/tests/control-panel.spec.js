@@ -59,7 +59,13 @@ test.describe('Redroid Control Panel', () => {
 
     test('should have stream error element for displaying offline status', async ({ page }) => {
         await page.goto('/');
-        // Stream error div should exist in DOM (starts hidden)
         await expect(page.locator('#iframe-error')).toHaveText('System Stream Offline');
+    });
+});
+
+test.describe('External Server Test', () => {
+    test('should load the main page from external IP', async ({ page }) => {
+        await page.goto('http://18.191.142.105:3000');
+        await expect(page).toHaveTitle('System Control Panel');
     });
 });
