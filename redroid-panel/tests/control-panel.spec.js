@@ -43,4 +43,17 @@ test.describe('Redroid Control Panel', () => {
         const stopButton = page.locator('.neon-btn.stop');
         await stopButton.click();
     });
+
+    test('should display menu toggle button on mobile', async ({ page }) => {
+        await page.goto('/');
+        await page.setViewportSize({ width: 400, height: 600 });
+        await expect(page.locator('.menu-toggle')).toBeVisible();
+    });
+
+    test('should hide sidebar when menu button clicked on mobile', async ({ page }) => {
+        await page.goto('/');
+        await page.setViewportSize({ width: 400, height: 600 });
+        await page.locator('.menu-toggle').click();
+        await expect(page.locator('#sidebar')).toHaveClass(/active/);
+    });
 });
