@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>System Control Panel</title>
+    <style>
+        body {
+            background-color: #0b0f19;
+            color: #ffffff;
+            font-family: 'Segoe UI', Roboto, sans-serif;
+            display: flex;
+            height: 100vh;
+            margin: 0;
+            overflow: hidden;
+        }
+
+        .glass-sidebar {
+            background: rgba(15, 23, 42, 0.4);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border-right: 1px solid rgba(255, 255, 255, 0.05);
+            width: 280px;
+            padding: 2.5rem;
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+            box-shadow: 5px 0 30px rgba(0, 0, 0, 0.5);
+            z-index: 10;
+        }
+
+        h2 {
+            margin-top: 0;
+            font-weight: 300;
+            letter-spacing: 2px;
+            color: #e2e8f0;
+            font-size: 1.4rem;
+        }
+
+        .neon-btn {
+            background: transparent;
+            border: 1px solid #00f3ff;
+            color: #00f3ff;
+            padding: 14px;
+            border-radius: 8px;
+            cursor: pointer;
+            text-transform: uppercase;
+            font-weight: 600;
+            letter-spacing: 2px;
+            font-size: 0.85rem;
+            transition: all 0.3s ease;
+            box-shadow: 0 0 12px rgba(0, 243, 255, 0.1);
+        }
+
+        .neon-btn:hover {
+            background: rgba(0, 243, 255, 0.08);
+            box-shadow: 0 0 20px rgba(0, 243, 255, 0.4);
+            text-shadow: 0 0 8px rgba(0, 243, 255, 0.6);
+        }
+
+        .neon-btn.stop {
+            border-color: #ff0055;
+            color: #ff0055;
+            box-shadow: 0 0 12px rgba(255, 0, 85, 0.1);
+        }
+
+        .neon-btn.stop:hover {
+            background: rgba(255, 0, 85, 0.08);
+            box-shadow: 0 0 20px rgba(255, 0, 85, 0.4);
+            text-shadow: 0 0 8px rgba(255, 0, 85, 0.6);
+        }
+
+        .status-container {
+            margin-top: auto;
+            font-size: 0.8rem;
+            color: #94a3b8;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+
+        .stream-viewport {
+            flex-grow: 1;
+            background: #070a12;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="glass-sidebar">
+        <h2>ENVIRONMENT</h2>
+        <button class="neon-btn" onclick="executeControl('start')">Initialize System</button>
+        <button class="neon-btn stop" onclick="executeControl('stop')">Terminate System</button>
+        <div class="status-container">
+            <span>Status: </span><span id="status-text" style="color: #00f3ff;">Online</span>
+        </div>
+    </div>
+
+    <div class="stream-viewport">
+        <iframe id="stream-frame" src=""></iframe>
+    </div>
+
+    <script>
+        const hostSecure = window.location.hostname;
+        document.getElementById('stream-frame').src = `http://${hostSecure}:8000`;
+
+        async function executeControl(action) {
+            const statusLabel = document.getElementById('status-text');
+            statusLabel.innerText = `Processing ${action}...`;
+            statusLabel.style.color = '#e2e8f0';
+
+            try {
+                const response = await fetch(`/api/${action}`, { method: 'POST' });
+                if (response.ok) {
+                    if (action === 'start') {
+                        statusLabel.innerText = 'Online';
+                        statusLabel.style.color = '#00f3ff';
+                        setTimeout(() => {
+                            document.getElementById('stream-frame').src = `http://${hostSecure}:8000`;
+                        }, 3000);
+                    } else {
+                        statusLabel.innerText = 'Offline';
+                        statusLabel.style.color = '#ff0055';
+                    }
+                } else {
+                    statusLabel.innerText = 'Error';
+                    statusLabel.style.color = '#ff0055';
+                }
+            } catch (err) {
+                statusLabel.innerText = 'Unreachable';
+            }
+        }
+    </script>
+</body>
+</html>
