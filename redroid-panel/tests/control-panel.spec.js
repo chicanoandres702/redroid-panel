@@ -56,4 +56,10 @@ test.describe('Redroid Control Panel', () => {
         await page.locator('.menu-toggle').click();
         await expect(page.locator('#sidebar')).toHaveClass(/active/);
     });
+
+    test('should have stream error element for displaying offline status', async ({ page }) => {
+        await page.goto('/');
+        // Stream error div should exist in DOM (starts hidden)
+        await expect(page.locator('#iframe-error')).toHaveText('System Stream Offline');
+    });
 });
